@@ -3,25 +3,21 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>Bloom — monthly budget</title>
+<title>Careful — monthly budget</title>
 <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
 
 <div id="app">
 
-  <aside class="sidebar">
+  <header class="topbar">
     <div class="brand">
-      <svg class="brand-flower" viewBox="0 0 40 40" width="22" height="22">
-        <g fill="var(--violet)">
-          <ellipse cx="20" cy="12" rx="6" ry="9"/>
-          <ellipse cx="20" cy="28" rx="6" ry="9"/>
-          <ellipse cx="12" cy="20" rx="9" ry="6"/>
-          <ellipse cx="28" cy="20" rx="9" ry="6"/>
-        </g>
+      <svg class="brand-eye" viewBox="0 0 40 40" width="24" height="24" aria-hidden="true">
+        <path d="M3 20s6.5-10 17-10 17 10 17 10-6.5 10-17 10S3 20 3 20Z" fill="none" stroke="var(--violet)" stroke-width="2.5" stroke-linejoin="round"/>
         <circle cx="20" cy="20" r="5" fill="var(--pink)"/>
+        <circle cx="20" cy="20" r="2" fill="var(--bg-sidebar)"/>
       </svg>
-      Bloom
+      Careful
     </div>
 
     <div class="month-nav">
@@ -30,7 +26,7 @@
       <button id="nextMonth" aria-label="Next month">›</button>
     </div>
 
-    <nav class="side-tabs">
+    <nav class="top-tabs">
       <button data-tab="dashboard" class="active">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/><path d="M12 3v9l6 3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
         Dashboard
@@ -39,30 +35,37 @@
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M4 6h16M4 12h16M4 18h10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
         Entries
       </button>
+      <button data-tab="review">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 19V10m7 9V5m7 14v-7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M3 19h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        Year in review
+      </button>
+      <button data-tab="set amounts">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Z" stroke="currentColor" stroke-width="2"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.88l.06.06-2.1 2.1-.06-.06a1.7 1.7 0 0 0-1.88-.34 1.7 1.7 0 0 0-1.03 1.56V20.3h-3v-.1A1.7 1.7 0 0 0 10.7 18.6a1.7 1.7 0 0 0-1.88.34l-.06.06-2.1-2.1.06-.06A1.7 1.7 0 0 0 7.06 15a1.7 1.7 0 0 0-1.56-1.03h-.1v-3h.1A1.7 1.7 0 0 0 7.06 9.94a1.7 1.7 0 0 0-.34-1.88l-.06-.06 2.1-2.1.06.06a1.7 1.7 0 0 0 1.88.34 1.7 1.7 0 0 0 1.03-1.56v-.1h3v.1A1.7 1.7 0 0 0 15.76 6.3a1.7 1.7 0 0 0 1.88-.34l.06-.06 2.1 2.1-.06.06a1.7 1.7 0 0 0-.34 1.88 1.7 1.7 0 0 0 1.56 1.03h.1v3h-.1A1.7 1.7 0 0 0 19.4 15Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+        Budgets
+      </button>
     </nav>
-
-    <div class="sidebar-stats">
-      <div class="stat">
-        <span class="stat-label">Income</span>
-        <span class="stat-val mono income" id="sideIncome">$0.00</span>
-      </div>
-      <div class="stat">
-        <span class="stat-label">Expenses</span>
-        <span class="stat-val mono expense" id="sideExpense">$0.00</span>
-      </div>
-      <div class="stat">
-        <span class="stat-label">Net</span>
-        <span class="stat-val mono" id="sideNet">$0.00</span>
-      </div>
-    </div>
 
     <button class="add-btn" id="addBtn">
       <span>+</span> Add entry
     </button>
-  </aside>
+  </header>
 
   <main>
     <section id="tab-dashboard">
+      <div class="summary-stats">
+        <div class="stat">
+          <span class="stat-label">Income</span>
+          <span class="stat-val mono income" id="sideIncome">$0.00</span>
+        </div>
+        <div class="stat">
+          <span class="stat-label">Expenses</span>
+          <span class="stat-val mono expense" id="sideExpense">$0.00</span>
+        </div>
+        <div class="stat">
+          <span class="stat-label">Net</span>
+          <span class="stat-val mono" id="sideNet">$0.00</span>
+        </div>
+      </div>
       <div class="dash-top">
         <div class="card ring-card">
           <h3>Overall budget</h3>
@@ -89,6 +92,66 @@
           <h3>Entries — <span id="entriesMonthLabel"></span></h3>
         </div>
         <div id="entriesList"></div>
+      </div>
+    </section>
+
+    <section id="tab-review" style="display:none">
+      <div class="review-heading">
+        <div>
+          <span class="eyebrow">Year in review</span>
+          <h1 id="reviewYearLabel">—</h1>
+        </div>
+        <p>Take-home income and every expense for the year.</p>
+      </div>
+      <div class="review-totals">
+        <div class="review-total income">
+          <span>Income after taxes</span>
+          <strong class="mono" id="reviewIncome">$0.00</strong>
+        </div>
+        <div class="review-total expense">
+          <span>Total spent</span>
+          <strong class="mono" id="reviewSpent">$0.00</strong>
+        </div>
+        <div class="review-total">
+          <span>Left after spending</span>
+          <strong class="mono" id="reviewNet">$0.00</strong>
+        </div>
+      </div>
+      <div class="card review-breakdown-card">
+        <div class="card-head-row">
+          <h3>Spending breakdown</h3>
+          <span id="reviewTransactionCount">0 entries</span>
+        </div>
+        <div id="reviewBreakdown"></div>
+      </div>
+    </section>
+
+    <section id="tab-budgets" style="display:none">
+      <div class="settings-grid">
+        <div class="card settings-card">
+          <h3>Fixed monthly amounts</h3>
+          <div class="fixed-field">
+            <label for="fixedIncome">Monthly income after taxes</label>
+            <input id="fixedIncome" type="number" min="0" step="0.01" class="mono" placeholder="0.00">
+          </div>
+          <div class="fixed-field">
+            <label for="fixedRent">Rent</label>
+            <input id="fixedRent" type="number" min="0" step="0.01" class="mono" placeholder="0.00">
+          </div>
+          <p class="fixed-status" id="fixedStatus" aria-live="polite"></p>
+        </div>
+        <div class="card settings-card">
+          <h3>Company yearly funds</h3>
+          <div class="fixed-field">
+            <label for="transportationFund">Transportation</label>
+            <input id="transportationFund" type="number" min="0" step="0.01" class="mono" placeholder="0.00">
+          </div>
+          <div class="fixed-field">
+            <label for="wellnessFund">Wellness</label>
+            <input id="wellnessFund" type="number" min="0" step="0.01" class="mono" placeholder="0.00">
+          </div>
+          <p class="fixed-status" id="fundStatus" aria-live="polite"></p>
+        </div>
       </div>
     </section>
   </main>

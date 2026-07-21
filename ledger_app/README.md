@@ -1,4 +1,4 @@
-# Bloom — a daily budgeting app
+# Careful — a daily budgeting app
 
 A small Flask + SQLite budgeting app: track income and expenses, see spending
 by category, and set monthly limits. Built as a foundation to extend.
@@ -10,6 +10,16 @@ cd ledger_app
 pip install -r requirements.txt
 python app.py
 ```
+
+## Deploying to Render
+
+This repository includes a `render.yaml` Blueprint for deployment. In Render,
+choose **New → Blueprint**, connect the GitHub repository, and select it. Render
+will install the dependencies, start the app with Gunicorn, and attach a
+persistent disk for the SQLite database.
+
+The app has no sign-in system. Do not share a public deployment link with
+anyone you do not want to be able to view and edit the budget.
 
 The database file `ledger.db` is created automatically on first run, in the
 same folder as `app.py`.
